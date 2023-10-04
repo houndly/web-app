@@ -12,8 +12,6 @@ Veterinaria App es una aplicación web desarrollada en React que facilita la ges
 
 - **Recordatorios de citas:** Recibe recordatorios automáticos de las citas programadas para no perder ninguna.
 
-- **Historial médico:** Lleva un historial médico detallado de cada paciente, incluyendo diagnósticos, tratamientos y notas.
-
 - **Filtros y búsquedas:** Encuentra rápidamente la información que necesitas con potentes filtros y opciones de búsqueda.
 
 - **Interfaz intuitiva:** Nuestra interfaz de usuario amigable facilita la navegación y el uso de la aplicación.
