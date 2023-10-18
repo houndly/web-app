@@ -34,7 +34,7 @@ export const SummaryAppointments = ({ data, title }: Card) => {
                             <p className="ellipsis">{item.date}</p>
                         </div>
                         <div className="col-md-3">
-                            <p className="ellipsis">{item.franja_Horaria}</p>
+                            <p className="ellipsis">{item.appointment_time}</p>
                         </div>
                         <div className="col-md-3">
                             <p className="ellipsis">{item.type}</p>

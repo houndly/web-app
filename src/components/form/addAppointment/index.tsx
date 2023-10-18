@@ -1,10 +1,10 @@
-import { Button, Box, Typography, TextField, Divider, } from "@mui/material"
+import { Button, Box, Typography, TextField, } from "@mui/material"
 import FormErrorMessage from "./main/FormErrorMessage"
 import { SchemaForm, InitialValue } from "./main/schema/SchemaForm"
 import { Formik, Form } from "formik"
 import { DatePicker } from '@mui/x-date-pickers/DatePicker';
 import { TimePicker } from '@mui/x-date-pickers/TimePicker';
-import dayjs, { Dayjs } from 'dayjs';
+import dayjs from 'dayjs';
 import { LocalizationProvider } from "@mui/x-date-pickers";
 import { AdapterDayjs } from '@mui/x-date-pickers/AdapterDayjs';
 
@@ -14,8 +14,6 @@ type Props = {
 
 export const AddAppointment = ({ onSubmit }: Props) => {
 	const today = dayjs();
-	const isInCurrentYear = (date: Dayjs) => date.get('year') === dayjs().get('year');
-	const yesterday = dayjs().subtract(1, 'day');
 	const todayStartOfTheDay = today.startOf('day');
 
 	return (
@@ -31,7 +29,7 @@ export const AddAppointment = ({ onSubmit }: Props) => {
 				validationSchema={SchemaForm}
 				onSubmit={(values) => { onSubmit(values) }}
 			>
-				{({ values, errors, handleChange, handleSubmit, handleBlur, touched }) => (
+				{({ values, errors, handleChange,  touched }) => (
 					<Form
 						onSubmit={(e) => {
 							e.preventDefault()

@@ -1,7 +1,7 @@
 // Import the functions you need from the SDKs you need
+import { getAnalytics } from "firebase/analytics";
 import { initializeApp } from "firebase/app";
 import { getAuth, signInWithPopup, GoogleAuthProvider, User } from 'firebase/auth';
-import { useStore } from "../../store";
 
 // TODO: Add SDKs for Firebase products that you want to use
 // https://firebase.google.com/docs/web/setup#available-libraries
@@ -20,7 +20,7 @@ const firebaseConfig = {
 
 // Initialize Firebase
 const app = initializeApp(firebaseConfig);
-// const analytics = getAnalytics(app);
+ const analytics = getAnalytics(app);
 const provider = new GoogleAuthProvider();
 provider.setCustomParameters({ prompt: 'select_account' });
 
@@ -34,7 +34,7 @@ export const getIdToken = () => currentUser()?.getIdToken();
 export const getIdTokenResult = () => currentUser()?.getIdTokenResult();
 export const getToken = () => getIdToken();
 export const getTokenResult = () => getIdTokenResult();
-
+export const get_Analytics = () => analytics;
 // export const getTokenId = () => getIdTokenResult()?.tokenId;
 // export const getTokenExpirationTime = () => getIdTokenResult()?.expirationTime;
 // export const getTokenIssuedAtTime = () => getIdTokenResult()?.issuedAtTime;

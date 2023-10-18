@@ -1,6 +1,5 @@
 import { Outlet } from "react-router-dom"
 import { DrawerMenu } from "../../components/menu"
-import { Container } from "@mui/material"
 
 export const Layout = () => {
     return (

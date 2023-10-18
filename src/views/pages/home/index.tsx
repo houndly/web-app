@@ -114,7 +114,7 @@ export const Home = () => {
                 {appointments.length > 0 &&
                     <AppointmentList data={appointments} title={selectedFilter === 'day' ? '📅 Citas para hoy' : '📅 Citas de esta semana'} ></AppointmentList>
                 }
-                {appointments.length === 0 && <p>No hay citas para mostrar</p>}
+                {appointments.length === 0 && <h3 className="mx-auto my-4 d-flex justify-content-between ">No hay citas para mostrar</h3>}
 
             </div>
             <BasicModal open={open} onClose={() => setOpen(false)}>

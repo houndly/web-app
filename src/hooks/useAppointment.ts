@@ -1,10 +1,9 @@
 import { useQuery } from '@tanstack/react-query';
-import { Appointment } from '../types/appointments';
 
 export const useAppointment = (endpoint: string) => {
     const getAppointmentsApi = async () => {
         try {
-            let url = 'http://10.25.0.5:8080/api/appointments';
+            let url = 'https://chatbot-deploy-dot-houndly-393501.uc.r.appspot.com/api/appointments';
             if (endpoint) {
                 url += `/${endpoint}`;
             }

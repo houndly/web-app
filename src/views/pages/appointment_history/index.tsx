@@ -1,10 +1,9 @@
 import { Container } from "@mui/material"
-import { useEffect, useMemo } from "react"
-import dataMocks from "../../../mocks/appointments.json"
+import { useEffect, useMemo, useState } from "react"
 import { Table } from '../../../components/table/index';
 import { type MRT_ColumnDef } from 'material-react-table';
 import { Appointment } from '../../../types/appointments';
-import { useSelector } from "react-redux";
+import { useAppointment } from '../../../hooks/useAppointment';
 
 //example data type
 type Person = {
@@ -18,10 +17,17 @@ type Person = {
 };
 
 //nested data is ok, see accessorKeys in ColumnDef below
-const data: Appointment[] = dataMocks
 
 
 export const Appointment_History = () => {
+    const { data } = useAppointment('');
+
+    const [appointments, setAppointments] = useState<Appointment[]>([])
+
+    useEffect(() => {
+        setAppointments(data);
+    }, [data]);
+
 
     const columns = useMemo<MRT_ColumnDef<Person>[]>(
         () => [
@@ -41,7 +47,7 @@ export const Appointment_History = () => {
                 size: 200,
             },
             {
-                accessorKey: 'document_number',
+                accessorKey: 'document_id',
                 header: 'Documento',
                 size: 150,
             },
@@ -67,7 +73,7 @@ export const Appointment_History = () => {
     return (
         <>
             <Container maxWidth="lg" sx={{ marginY: '5rem', textAlign: 'center' }}>
-                <Table data={data} columns={columns} />
+                <Table data={appointments} columns={columns} />
             </Container>
         </>
     )

@@ -1,7 +1,6 @@
 import { Appointment } from "../../../types/appointments"
 import WhatsAppIcon from '@mui/icons-material/WhatsApp';
 import PetsIcon from '@mui/icons-material/Pets';
-import { Chip } from "@mui/material";
 
 type Card = {
     data: Appointment[]
@@ -30,9 +29,9 @@ export const AppointmentList = ({ data, title }: Card) => {
     return (
         <>
 
-            <h3 className="w-75 mb-4">{title}</h3>
+            <h3 className="mx-auto my-4 d-flex justify-content-between ">{title}</h3>
             {data.map((item, index) => (
-                <div className="w-75 shadow-none p-3 mb-3 bg-body-tertiary rounded d-flex align-items-center" key={index}>
+                <div className="mx-auto my-4 d-flex justify-content-between shadow-none p-3 mb-3 bg-body-tertiary rounded d-flex align-items-center" key={index}>
                     <div className="col-md-1">{index}</div>
                     <div className="col-md-3">
                         <p className="text">{item.type}</p>

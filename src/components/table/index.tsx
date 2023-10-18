@@ -1,4 +1,4 @@
-import { Delete, Edit, RemoveRedEye } from "@mui/icons-material"
+import { Delete, Edit } from "@mui/icons-material"
 import { Box, IconButton, Tooltip } from "@mui/material"
 import MaterialReactTable from "material-react-table"
 
@@ -30,7 +30,9 @@ export const Table = ({ data, columns }: TableProps) => {
                                 <IconButton
                                     color="primary"
                                     size="small"
-                                    onClick={() => { }}
+                                    onClick={() => {
+                                        console.log(row);
+                                    }}
                                 >
                                     <Edit />
                                 </IconButton>
