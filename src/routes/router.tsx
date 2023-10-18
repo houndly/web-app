@@ -1,4 +1,4 @@
-import { BrowserRouter as Router,Routes,Route} from "react-router-dom";
+import { BrowserRouter as Router, Routes, Route, Navigate } from "react-router-dom";
 import { Layout } from "../views/layout";
 import { routes } from './routes';
 import { Login } from "../views/pages/login";
@@ -9,6 +9,8 @@ export const App = () => {
     return (
         <Router>
             <Routes>
+                <Route path="/" element={<ProtectedRoute><Navigate replace to="/home" /></ProtectedRoute>} />
+
                 <Route element={<ProtectedRoute><Layout /></ProtectedRoute>}>
                     {routes.map((item, index) => (
                         <Route key={index} path={item.path} element={<ProtectedRoute>{item.component}</ProtectedRoute>} />

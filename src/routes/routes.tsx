@@ -13,6 +13,7 @@ export const menuItems = [
 export const routes = [
   { path: 'home', component: <Home /> },
   { path: 'historial-citas', component: <Appointment_History /> },
+  
 ];
 
 export const COMMERCE_NAME: string = 'My Best Friend';
