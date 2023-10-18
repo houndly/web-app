@@ -1,0 +1,69 @@
+.ellipsis {
+    text-overflow: ellipsis;
+    /* Required for text-overflow to do anything */
+    white-space: nowrap;
+    overflow: hidden;
+}
+
+.mx-width {
+    max-width: 100%;
+}
+
+.mx-width-90 {
+    max-width: 93%;
+}
+
+.ml-5 {
+    margin-left: 5%;
+}
+
+.scroll {
+    height: 300px;
+    overflow-y: scroll
+}
+
+html ::-webkit-scrollbar {
+    width: 12px
+}
+
+html ::-webkit-scrollbar-track {
+    background: #ffffff
+}
+
+html ::-webkit-scrollbar-thumb {
+    background-color: #f6f6f6e0;
+    border-radius: 20px;
+    border: 3px solid #888a8e
+}
+
+.reloj {
+    font-family: 'Share Tech Mono', monospace;
+    color: #ffffff;
+    text-align: center;
+    position: absolute;
+    left: 50%;
+    top: 50%;
+    transform: translate(-50%, -50%);
+    text-shadow: 0 0 20px rgba(10, 175, 230, 1), 0 0 20px rgba(10, 175, 230, 0);
+}
+
+.tiempo {
+    letter-spacing: 0.05em;
+    font-size: 80px;
+    padding: 5px 0;
+}
+
+.fecha {
+    letter-spacing: 0.1em;
+    font-size: 24px;
+}
+
+.text {
+    letter-spacing: 0.1em;
+    font-size: 14px;
+    font-family: "Roboto",
+        "Helvetica",
+        "Arial",
+        sans-serif;
+    margin: 0;
+}
