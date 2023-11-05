@@ -1,9 +1,8 @@
-import { Button, Box, Typography, TextField, } from "@mui/material"
+import { Button, Box, Typography, TextField, FormControl, Select, MenuItem, } from "@mui/material"
 import FormErrorMessage from "./main/FormErrorMessage"
 import { SchemaForm, InitialValue } from "./main/schema/SchemaForm"
 import { Formik, Form } from "formik"
 import { DatePicker } from '@mui/x-date-pickers/DatePicker';
-import { TimePicker } from '@mui/x-date-pickers/TimePicker';
 import dayjs from 'dayjs';
 import { LocalizationProvider } from "@mui/x-date-pickers";
 import { AdapterDayjs } from '@mui/x-date-pickers/AdapterDayjs';
@@ -12,9 +11,28 @@ type Props = {
 	onSubmit: (values: any) => void
 }
 
+const options = [
+	{ value: '1', label: '9:00 AM - 10:00 AM' },
+	{ value: '2', label: '10:00 AM - 11:00 AM' },
+	{ value: '3', label: '11:00 AM - 12:00 AM' },
+	{ value: '4', label: '12:00 PM - 1:00 PM' },
+	{ value: '5', label: '1:00 PM - 2:00 PM' },
+	{ value: '6', label: '2:00 PM - 3:00 PM' },
+	{ value: '7', label: '3:00 PM - 4:00 PM' },
+	{ value: '8', label: '4:00 PM - 5:00 PM' },
+	{ value: '9', label: '5:00 PM - 6:00 PM' },
+];
+
+const optionCita = [
+	{ value: '1', label: 'Vacunación' },
+	{ value: '2', label: 'Desparasitación' },
+	{ value: '3', label: 'Consulta médica' },
+	{ value: '4', label: 'Exámenes de laboratorio' },
+	{ value: '5', label: 'Otros' },
+];
+
 export const AddAppointment = ({ onSubmit }: Props) => {
 	const today = dayjs();
-	const todayStartOfTheDay = today.startOf('day');
 
 	return (
 		<Box >
@@ -24,19 +42,17 @@ export const AddAppointment = ({ onSubmit }: Props) => {
 				initialValues={{
 					...InitialValue,
 					date: dayjs(today), // Parse today as a Dayjs object
-					time: dayjs(todayStartOfTheDay), // Parse todayStartOfTheDay as a Dayjs object
 				}}
 				validationSchema={SchemaForm}
 				onSubmit={(values) => { onSubmit(values) }}
 			>
-				{({ values, errors, handleChange,  touched }) => (
+				{({ values, errors, handleChange, touched }) => (
 					<Form
 						onSubmit={(e) => {
 							e.preventDefault()
 							onSubmit({
 								...values,
-								date: dayjs(values.date).format("YYYY-MM-DD"),
-								time: dayjs(values.time).format("HH:mm"),
+								date: dayjs(values.date).format("DD/MM/YYYY"),
 							})
 						}}
 					>
@@ -106,17 +122,23 @@ export const AddAppointment = ({ onSubmit }: Props) => {
 							>
 								Tipo de cita
 							</Typography>
-							<TextField
-								fullWidth
-								name="type"
-								type="text"
-								autoComplete="off"
-								inputProps={{ maxLength: 155 }}
-								onChange={handleChange}
-								value={values.type}
-								size="small"
-								style={{ borderRadius: "16px" }}
-							/>
+							<FormControl style={{ width: '100%' }}>
+								<Select
+									sx={{ width: '100%', height: '40px' }}
+									labelId="select-label"
+									id="select"
+									value={values.type}
+									onChange={handleChange}
+									name="type"
+								>
+									{optionCita.map((option) => (
+										<MenuItem key={option.label} value={option.value}>
+											{option.label}
+										</MenuItem>
+									))}
+								</Select>
+							</FormControl>
+		
 							<FormErrorMessage nameField={"type"} error={errors} touched={touched} />
 
 							<Typography
@@ -126,22 +148,36 @@ export const AddAppointment = ({ onSubmit }: Props) => {
 								Fecha
 							</Typography>
 
-							<LocalizationProvider dateAdapter={AdapterDayjs}>
-								<DatePicker sx={{width:'100%'}} defaultValue={today} disablePast value={values.date} />
+							<LocalizationProvider   dateAdapter={AdapterDayjs}>
+								<DatePicker sx={{ width: '100%', height: '40px' }} defaultValue={today} disablePast value={values.date} />
 							</LocalizationProvider>
 
 							<FormErrorMessage nameField={"date"} error={errors} touched={touched} />
 
 							<Typography
 								variant="body2"
-								sx={{ fontWeight: 500, color: "#555555", m: "15px 0 5px" }}
+								sx={{ fontWeight: 500, color: "#555555", m: "2rem 0  5px" }}
 							>
 								Hora
 							</Typography>
 
-							<LocalizationProvider dateAdapter={AdapterDayjs}>
-								<TimePicker sx={{ width: '100%' }}  defaultValue={todayStartOfTheDay} value={values.time} />
-							</LocalizationProvider>
+							<FormControl style={{ width: '100%' }}>
+								<Select
+									sx={{ width: '100%', height: '40px' }}
+
+									labelId="select-label"
+									id="select"
+									value={values.time}
+									onChange={handleChange}
+									name="time"
+								>
+									{options.map((option) => (
+										<MenuItem key={option.label} value={option.value}>
+											{option.label}
+										</MenuItem>
+									))}
+								</Select>
+							</FormControl>
 							<FormErrorMessage nameField={"time"} error={errors} touched={touched} />
 							<Box
 								component="div"

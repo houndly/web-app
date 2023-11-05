@@ -20,7 +20,6 @@ type Appointment = {
   type: string;
   date: string; // Cambiado a tipo string
   time: string; // Cambiado a tipo string
-  symptoms: string;
   state: string;
 };
 
@@ -30,7 +29,6 @@ export const InitialValue: Appointment = {
   phone: "",
   type: "",
   date: dayjs().format("YYYY-MM-DD"), // Convertido a cadena con formato deseado
-  time: dayjs().format("HH:mm"), // Convertido a cadena con formato deseado
-  symptoms: "",
+  time: "", // Convertido a cadena con formato deseado
   state: "Pendiente",
 };

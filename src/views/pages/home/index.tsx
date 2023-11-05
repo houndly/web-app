@@ -3,128 +3,160 @@ import { Appointment } from '../../../types/appointments';
 import { BasicModal, AddAppointment } from "../../../components/";
 import { useState, useEffect } from "react";
 import { AppointmentList } from '../../../components/appointments/list/index';
-import { useAppointment } from "../../../hooks/useAppointment";
+import { createAppointment, useAppointmentsDay, useAppointmentsWeek } from "../../../hooks/useAppointment";
+import { SnackBar } from '../../../components/snackBar/index';
 
 
 export const Home = () => {
-    const [open, setOpen] = useState(false);
-    const [appointments, setAppointments] = useState<Appointment[]>([])
-    const [selectedFilter, setSelectedFilter] = useState(""); // Estado para mantener el filtro seleccionado
-    const [selectedFilterState, setSelectedFilterState] = useState(""); // Estado para mantener el filtro seleccionado
+    const { data: dataDay, error: errorDay, isInitialLoading: isInitialLoadingDay, isError: isErrorDay, isFetching: isFetchingDay, refetch: refetchDay } = useAppointmentsDay();
+    const { data: dataWeek, error: errorWeek, isInitialLoading: isInitialLoadingWeek, isError: isErrorWeek, isFetching: isFetchingWeek, refetch: refetchWeek } = useAppointmentsWeek();
 
-    const queryDay = useAppointment('day');
-    const queryWeek = useAppointment('week');
+    const [open, setOpen] = useState(false);
+    const [openSnack, setOpenSnack] = useState(false);
+    const [data, setData] = useState<Appointment[]>([]);
+    const [appointments, setAppointments] = useState<Appointment[]>([]);
+    const [selectedFilter, setSelectedFilter] = useState("");
+    const [selectedFilterState, setSelectedFilterState] = useState("");
+    let result: boolean = true;
+    const handleCreate = async (newAppointment: Appointment) => {
+        try {
+            result = await createAppointment(newAppointment);
+            setOpenSnack(result ? true : false);
+            setOpen(false);
+        } catch (error) {
+            console.error('Error creating appointment:', error);
+        }
+    }
+    useEffect(() => {
+        if (dataDay?.length > 0) {
+            setAppointments(dataDay)
+            setData(dataDay)
+        }
+
+    }, [dataDay])
+
+    useEffect(() => {
+        if (dataWeek?.length > 0) {
+            setAppointments(dataWeek)
+            setData(dataWeek)
+        }
+    }, [dataWeek])
+
 
 
     const handleFilterChange = (filter: string) => {
         if (selectedFilter === filter) {
-            // Deselecciona el filtro si ya estaba seleccionado
             setSelectedFilter("");
+            setAppointments([])
         } else {
-            // Selecciona el nuevo filtro
             setSelectedFilter(filter);
-        }        // Aquí puedes implementar la lógica para filtrar la data de las citas dependiendo del filtro seleccionado
+            if (filter === "day") {
+                refetchDay()
+            } else if (filter === "week") {
+                refetchWeek()
+            }
+
+        }
     };
-
-
     const handleFilterStateChange = (filter: string) => {
         if (selectedFilterState === filter) {
-            // Deselecciona el filtro si ya estaba seleccionado
             setSelectedFilterState("");
         } else {
-            // Selecciona el nuevo filtro
             setSelectedFilterState(filter);
-        }        // Aquí puedes implementar la lógica para filtrar la data de las citas dependiendo del filtro seleccionado
+        }
     };
 
     useEffect(() => {
-        if (selectedFilter !== "") {
-            if (selectedFilter === "day") {
-                setAppointments(queryDay.data);
 
-            } else if (selectedFilter === "week") {
-                setAppointments(queryWeek.data);
-            }
+        if (selectedFilter === "day" && dataDay?.length > 0) {
+            setAppointments(dataDay)
+            setData(dataDay)
+        } else if (selectedFilter === "week" && dataWeek?.length > 0) {
+            setAppointments(dataWeek)
+            setData(dataWeek)
         }
+
+
         if (selectedFilterState !== "") {
 
-            let filteredAppointments: Appointment[] = [];
+            let filteredAppointments: Appointment[] = data;
             if (selectedFilterState === "Realizada" || selectedFilterState === "Cancelada" || selectedFilterState === "Pendiente" || selectedFilterState === "Incumplimiento") {
-                // Filtra las citas según el estado seleccionado (listo, cancelado, incompleto)
-                if (selectedFilter === "day") {
-                    filteredAppointments = queryDay.data.filter((appointment: Appointment) => appointment.state === selectedFilterState);
-                } else {
-                    filteredAppointments = queryWeek.data.filter((appointment: Appointment) => appointment.state === selectedFilterState);
-                }
+                filteredAppointments = filteredAppointments.filter((appointment: Appointment) => appointment.state === selectedFilterState);
+                setAppointments(filteredAppointments);
             }
-
-            setAppointments(filteredAppointments);
         }
-    }, [selectedFilter, selectedFilterState]);
+        if (selectedFilterState === "" && selectedFilter === "") {
+            setAppointments([])
+        }
+
+    }, [selectedFilterState, selectedFilter]);
 
     return (
-        <div className="mt-5 pt-4 d-flex flex-column ">
-            <div className="row d-flex flex-row justify-content-end p-4 w-75 my-auto mx-auto" >
-                <Button sx={{
-                    background: "darkgray",
-                    '&:hover': {
-                        backgroundColor: '#ACD4F7', // Color al hacer hover
-                    },
-                }} className="btn tnb-secondary h-25 w-auto m-2 text-white"
-                    onClick={() => setOpen(true)}
-                >Agregar Cita</Button>
-            </div>
-            <div className="mx-auto my-4 w-75 d-flex justify-content-between ">
-                <div>
-                    <Chip label="Citas para hoy" variant="outlined"
-                        onClick={() => handleFilterChange("day")}
-                        color={selectedFilter === "day" ? "primary" : "default"}
-                    />
-                    <Chip label="Citas esta semana" variant="outlined"
-                        onClick={() => handleFilterChange("week")}
-                        color={selectedFilter === "week" ? "primary" : "default"}
-
-                    />
+        <>
+            <div className="mt-5 pt-4 d-flex flex-column ">
+                <div className="row d-flex flex-row justify-content-end p-4 w-75 my-auto mx-auto" >
+                    <Button sx={{
+                        background: "darkgray",
+                        '&:hover': {
+                            backgroundColor: '#ACD4F7', // Color al hacer hover
+                        },
+                    }} className="btn tnb-secondary h-25 w-auto m-2 text-white"
+                        onClick={() => setOpen(true)}
+                    >Agregar Cita</Button>
                 </div>
-                <div>
-                    <Chip label="Realizadas" variant="outlined"
-                        onClick={() => handleFilterStateChange("Realizada")}
-                        color={selectedFilterState === "Realizada" ? "primary" : "default"}
+                <div className="mx-auto my-4 w-75 d-flex justify-content-between ">
+                    <div>
+                        <Chip label="Citas para hoy" variant="outlined"
+                            onClick={() => { handleFilterChange("day") }}
+                            color={selectedFilter === "day" ? "primary" : "default"}
+                        />
+                        <Chip label="Citas esta semana" variant="outlined"
+                            onClick={() => { handleFilterChange("week") }}
+                            color={selectedFilter === "week" ? "primary" : "default"}
+                        />
+                    </div>
+                    <div>
+                        <Chip
+                            label="Realizadas"
+                            variant="outlined"
+                            onClick={() => handleFilterStateChange("Realizada")}
+                            color={selectedFilterState === "Realizada" ? "primary" : "default"}
+                            disabled={appointments?.length === 0}
+                        />
 
-                    />
-
-                    <Chip label="Pendientes" variant="outlined"
-                        onClick={() => handleFilterStateChange("Pendiente")}
-                        color={selectedFilterState === "Pendiente" ? "primary" : "default"}
-
-                    />
-                    <Chip label="Canceladas" variant="outlined"
-                        onClick={() => handleFilterStateChange("Cancelada")}
-                        color={selectedFilterState === "Cancelada" ? "primary" : "default"}
-
-                    />
-                    <Chip label="Incumplidas" variant="outlined"
-                        onClick={() => handleFilterStateChange("Incumplimiento")}
-                        color={selectedFilterState === "Incumplimiento" ? "primary" : "default"}
-
-                    />
+                        <Chip label="Pendientes" variant="outlined"
+                            onClick={() => handleFilterStateChange("Pendiente")}
+                            color={selectedFilterState === "Pendiente" ? "primary" : "default"}
+                            disabled={appointments?.length === 0}
+                        />
+                        <Chip label="Canceladas" variant="outlined"
+                            onClick={() => handleFilterStateChange("Cancelada")}
+                            color={selectedFilterState === "Cancelada" ? "primary" : "default"}
+                            disabled={appointments?.length === 0}
+                        />
+                        <Chip label="Incumplidas" variant="outlined"
+                            onClick={() => handleFilterStateChange("Incumplimiento")}
+                            color={selectedFilterState === "Incumplimiento" ? "primary" : "default"}
+                            disabled={appointments?.length === 0}
+                        />
+                    </div>
                 </div>
-            </div>
-            <div className="row d-flex flex-row justify-content-center aling-content-center" style={{ margin: '0 auto' }} >
-                {appointments.length > 0 &&
-                    <AppointmentList data={appointments} title={selectedFilter === 'day' ? '📅 Citas para hoy' : '📅 Citas de esta semana'} ></AppointmentList>
-                }
-                {appointments.length === 0 && <h3 className="mx-auto my-4 d-flex justify-content-between ">No hay citas para mostrar</h3>}
+                <div className="row d-flex flex-row aling-content-center mx-auto my-4 w-75 d-flex justify-content-between " style={{ margin: '0 auto' }} >
+                    {appointments && appointments.length > 0 &&
+                        <AppointmentList data={appointments} title={selectedFilter === 'day' ? '📅 Citas para hoy' : '📅 Citas de esta semana'} ></AppointmentList>
+                    }
+                    {appointments && appointments.length === 0 && <h3 className="mx-auto my-4 d-flex justify-content-between ">No hay citas para mostrar</h3>}
 
+                </div>
+                <BasicModal open={open} onClose={() => setOpen(false)}>
+                    <Container>
+                        <AddAppointment onSubmit={(newAppointment) => {
+                            handleCreate(newAppointment);
+                        }} />
+                    </Container>
+                </BasicModal>
             </div>
-            <BasicModal open={open} onClose={() => setOpen(false)}>
-                <Container>
-                    <AddAppointment onSubmit={(newAppointment) => {
-                        console.log(newAppointment);
-                        setOpen(false);
-                    }} />
-                </Container>
-            </BasicModal>
-        </div>
+            <SnackBar open={openSnack} setOpen={setOpenSnack} message={result ? "Creado Exitosamente":"Ocurrio un error inesperado "} severity={result ? "success" : "error"} />
+        </>
     );
 };

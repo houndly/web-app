@@ -3,7 +3,7 @@ import { useEffect, useMemo, useState } from "react"
 import { Table } from '../../../components/table/index';
 import { type MRT_ColumnDef } from 'material-react-table';
 import { Appointment } from '../../../types/appointments';
-import { useAppointment } from '../../../hooks/useAppointment';
+import { useAppointments } from '../../../hooks/useAppointment';
 
 //example data type
 type Person = {
@@ -20,14 +20,15 @@ type Person = {
 
 
 export const Appointment_History = () => {
-    const { data } = useAppointment('');
+    const [appointments, setAppointments] = useState<Appointment[]>([]);
 
-    const [appointments, setAppointments] = useState<Appointment[]>([])
-
+    const result = useAppointments();
+    
     useEffect(() => {
-        setAppointments(data);
-    }, [data]);
-
+        if (result.data) {
+            setAppointments(result.data)
+        }
+    }, [result.data])
 
     const columns = useMemo<MRT_ColumnDef<Person>[]>(
         () => [

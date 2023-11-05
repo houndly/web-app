@@ -17,42 +17,42 @@ export const Table = ({ data, columns }: TableProps) => {
             enableColumnActions={false}
             enableColumnFilters={false}
             enableHiding={false}
-            enableEditing={true}
+            enableEditing={false}
             // enableEditing={enableEditing}
             positionActionsColumn="last"
             columns={columns}
             data={data}
-            renderRowActions={({ row }) => {
-                return (
-                    <Box>
-                        {true && (
-                            <Tooltip title="Editar">
-                                <IconButton
-                                    color="primary"
-                                    size="small"
-                                    onClick={() => {
-                                        console.log(row);
-                                    }}
-                                >
-                                    <Edit />
-                                </IconButton>
-                            </Tooltip>
-                        )}
-                        {true && (
-                            <Tooltip title="Eliminar">
-                                <IconButton
-                                    color="primary"
-                                    size="small"
-                                    onClick={() => { }}
-                                >
-                                    <Delete />
-                                </IconButton>
-                            </Tooltip>
-                        )}
+            // renderRowActions={({ row }) => {
+            //     return (
+            //         <Box>
+            //             {true && (
+            //                 <Tooltip title="Editar">
+            //                     <IconButton
+            //                         color="primary"
+            //                         size="small"
+            //                         onClick={() => {
+            //                             console.log(row);
+            //                         }}
+            //                     >
+            //                         <Edit />
+            //                     </IconButton>
+            //                 </Tooltip>
+            //             )}
+            //             {true && (
+            //                 <Tooltip title="Eliminar">
+            //                     <IconButton
+            //                         color="primary"
+            //                         size="small"
+            //                         onClick={() => { }}
+            //                     >
+            //                         <Delete />
+            //                     </IconButton>
+            //                 </Tooltip>
+            //             )}
 
-                    </Box>
-                )
-            }}
+            //         </Box>
+            //     )
+            // }}
         />
     )
 }

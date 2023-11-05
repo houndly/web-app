@@ -32,7 +32,7 @@ export const AppointmentList = ({ data, title }: Card) => {
             <h3 className="mx-auto my-4 d-flex justify-content-between ">{title}</h3>
             {data.map((item, index) => (
                 <div className="mx-auto my-4 d-flex justify-content-between shadow-none p-3 mb-3 bg-body-tertiary rounded d-flex align-items-center" key={index}>
-                    <div className="col-md-1">{index}</div>
+                    <div className="col-md-1">{index+1}</div>
                     <div className="col-md-3">
                         <p className="text">{item.type}</p>
                     </div>
